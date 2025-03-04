@@ -7,7 +7,7 @@ app.use(express.static("public"));
 
 // Default route
 app.get("/", (req, res) => {
-    res.send("Welcome to My Personal Site!");
+    res.send("");
 });
 
 // Start the server
