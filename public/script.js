@@ -1,9 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('background');
     const ctx = canvas.getContext('2d');
-    resizeCanvas();
-
     const particles = [];
+    const mobileThreshold = 768; // Define the mobile threshold width
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        if (window.innerWidth > mobileThreshold) {
+            initParticles();
+        } else {
+            particles.length = 0; // Clear particles if on mobile
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+        }
+    }
 
     class Particle {
         constructor() {
@@ -63,22 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function animateParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
-        requestAnimationFrame(animateParticles);
-    }
-
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initParticles();
+        if (window.innerWidth > mobileThreshold) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
     }
 
     window.addEventListener('resize', resizeCanvas);
 
-    initParticles();
-    animateParticles();
+    if (window.innerWidth > mobileThreshold) {
+        initParticles();
+        animateParticles();
+    }
 });
